@@ -1,9 +1,10 @@
 "use server";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabaseServer";
 
 export async function calculateEstimate(id_mat: number, quantite: number, region: string) {
   try {
+    const supabase = await createClient();
     // 1. Récupérer le matériau et la carrière associée
     const { data: materiau, error: matError } = await supabase
       .from("materiaux")

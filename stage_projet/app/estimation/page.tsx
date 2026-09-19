@@ -202,10 +202,11 @@
 
 
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabaseServer";
 import SimulationForm from "@/components/SimulationForm";
 
 export default async function EstimationPage() {
+  const supabase = await createClient();
   const { data: materiaux } = await supabase
     .from("materiaux")
     .select("id_mat, nom_mat, prix_tonne");

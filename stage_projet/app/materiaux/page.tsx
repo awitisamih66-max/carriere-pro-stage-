@@ -1,8 +1,9 @@
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabaseServer";
 import MateriauxClient from "@/components/MateriauxClient";
 
 export default async function MateriauxPage() {
+  const supabase = await createClient();
   // On récupère les matériaux avec une jointure vers la table categories
   const { data: materiaux, error } = await supabase
     .from("materiaux")
