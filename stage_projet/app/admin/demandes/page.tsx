@@ -343,6 +343,12 @@ export default function GestionDemandesPage() {
   }).length;
 
   async function handleStatutChange(id_dem: number, nouveauIdStatut: number) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      return;
+    }
+
     // Optimistic update
     const nouveauStatut = statuts.find((s) => s.id_statut === nouveauIdStatut);
     setDemandes((prev) =>
@@ -372,6 +378,13 @@ export default function GestionDemandesPage() {
 
   async function confirmDelete() {
     if (!deleteTarget) return;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setDeleteTarget(null);
+      return;
+    }
 
     const previous = demandes;
     setDemandes((prev) => prev.filter((d) => d.id_dem !== deleteTarget.id));

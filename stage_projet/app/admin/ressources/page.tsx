@@ -136,6 +136,13 @@ export default function Ressources() {
     setSavingCarr(true);
     setError(null);
 
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setSavingCarr(false);
+      return;
+    }
+
     if (!carrForm.nom_carr.trim()) {
       setError("Le nom de la carrière est requis.");
       setSavingCarr(false);
@@ -189,6 +196,13 @@ export default function Ressources() {
     setSavingMat(true);
     setError(null);
 
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setSavingMat(false);
+      return;
+    }
+
     if (!matForm.nom_mat.trim() || !matForm.id_cat || !matForm.id_carr) {
       setError("Veuillez remplir les champs requis (Nom, Catégorie, Carrière).");
       setSavingMat(false);
@@ -221,6 +235,14 @@ export default function Ressources() {
   // ---------- Suppression ----------
   const confirmDelete = async () => {
     if (!deleteTarget) return;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setDeleteTarget(null);
+      return;
+    }
+
     const table = deleteTarget.type === "carriere" ? "carrieres" : "materiaux";
     const idField = deleteTarget.type === "carriere" ? "id_carr" : "id_mat";
 

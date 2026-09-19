@@ -303,6 +303,13 @@ export default function FlotteLogistiquePage() {
     setSavingTrans(true);
     setError(null);
 
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setSavingTrans(false);
+      return;
+    }
+
     const payload = {
       nom_trans: transForm.nom_trans.trim(),
       contact: transForm.contact.trim() || null,
@@ -333,6 +340,14 @@ export default function FlotteLogistiquePage() {
 
   async function confirmDelete() {
     if (!deleteTarget) return;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setDeleteTarget(null);
+      return;
+    }
+
     const table = deleteTarget.type === "transporteur" ? "transporteurs" : "camions";
     const idField = deleteTarget.type === "transporteur" ? "id_trans" : "id_cam";
 
@@ -367,6 +382,13 @@ export default function FlotteLogistiquePage() {
     e.preventDefault();
     setSavingCamion(true);
     setError(null);
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setError("Action refusée : Vous devez être authentifié.");
+      setSavingCamion(false);
+      return;
+    }
 
     const payload = {
       type_cam: camionForm.type_cam.trim(),
